@@ -50,6 +50,7 @@ labels = labels.to(device)
 
 # Create dataset and divide to train, valid and test part
 dataset = mil.MilDataset(data, ids, labels, normalize=True)
+
 train_indices, test_indices = train_test_split(np.arange(len(dataset)), test_size=0.2, stratify=dataset.labels.cpu())
 train, test = Subset(dataset, train_indices), Subset(dataset, test_indices)
 train_dl, test_dl = DataLoader(train, batch_size=batch_size, collate_fn=mil.collate, drop_last=True), \
@@ -82,10 +83,9 @@ model = model.to(device)
 losses = []
 running_loss = 0.0
 
-for t in range(1):
-  # for t in range(n_epochs):
+for t in range(n_epochs):
   for data, bagids, labels in train_dl:
-    print(data.shape)
+
     pred = model((data, bagids)).squeeze()
     loss = criterion(pred, labels)
 
